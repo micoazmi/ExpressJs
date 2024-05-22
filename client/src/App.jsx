@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import HomePage from './pages/Home';
+import Profile from './pages/Profile';
 
 const Root = () => (
   <div>
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },

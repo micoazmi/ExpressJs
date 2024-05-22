@@ -18,6 +18,7 @@ const Navbar = () => {
           {token ? (
             <>
               <Link to="/" className="text-white mr-4">Home</Link>
+              <Link to="/profile" className="text-white mr-4">Profile</Link>
               <button onClick={handleLogout} className="text-white">Logout</button>
             </>
           ) : (

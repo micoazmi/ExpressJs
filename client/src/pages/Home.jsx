@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const rupiah = (number) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR"
+  }).format(number);
+}
+
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
@@ -9,6 +16,8 @@ const HomePage = () => {
     price: ''
   });
   const [message, setMessage] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [currentProductId, setCurrentProductId] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -34,15 +43,25 @@ const HomePage = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.post('http://localhost:3000/products', formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setProducts([...products, response.data]);
+      if (editMode) {
+        await axios.put(`http://localhost:3000/products/${currentProductId}`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setMessage('Product updated successfully');
+      } else {
+        const response = await axios.post('http://localhost:3000/products', formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setProducts([...products, response.data]);
+        setMessage('Product created successfully');
+      }
       setFormData({ name: '', description: '', price: '' });
-      setMessage('Product created successfully');
+      setEditMode(false);
+      setCurrentProductId(null);
+      fetchProducts(); // Refresh the product list
     } catch (error) {
-      console.error('Error creating product', error);
-      setMessage('Error creating product');
+      console.error('Error submitting form', error);
+      setMessage('Error submitting form');
     }
   };
 
@@ -58,10 +77,20 @@ const HomePage = () => {
     }
   };
 
+  const handleEdit = (product) => {
+    setFormData({
+      name: product.name,
+      description: product.description,
+      price: product.price
+    });
+    setEditMode(true);
+    setCurrentProductId(product.id);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl mb-4">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Create Product</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-center">{editMode ? 'Update Product' : 'Create Product'}</h2>
         <form onSubmit={handleSubmit} className="mb-4">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -96,7 +125,7 @@ const HomePage = () => {
             />
           </div>
           <button type="submit" className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700">
-            Create Product
+            {editMode ? 'Update Product' : 'Create Product'}
           </button>
         </form>
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
@@ -130,9 +159,15 @@ const HomePage = () => {
                     {product.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    ${product.price}
+                    {rupiah(product.price)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                    <button
+                      onClick={() => handleEdit(product)}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleDelete(product.id)}
                       className="text-red-600 hover:text-red-900"
