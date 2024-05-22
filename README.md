@@ -27,3 +27,11 @@ npm install
 ```
 node server.js
 ```
+
+# Frontend/Client
+
+```
+cd client
+npm install
+npm run dev
+```

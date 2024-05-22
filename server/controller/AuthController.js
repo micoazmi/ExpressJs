@@ -5,9 +5,14 @@ const { User } = require("../models");
 module.exports = class AuthController {
   static register = async (req, res) => {
     try {
-      let { email, password } = req.body;
+      let { name, email, password, gender } = req.body;
       const hashedPassword = hashPassword(password);
-      const data = await User.create({ email, password: hashedPassword });
+      const data = await User.create({
+        name,
+        email,
+        password: hashedPassword,
+        gender,
+      });
       res
         .status(201)
         .json({ message: `id ${data.id} successfully registered` });
