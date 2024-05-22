@@ -1,18 +1,43 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Register from './components/Register';
-import Login from './components/Login';
-import Home from './components/Home';
+import {
+  createBrowserRouter,
+  RouterProvider,Outlet
+} from "react-router-dom";
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Navbar from './components/Navbar';
+import HomePage from './pages/Home';
 
+const Root = () => (
+  <div>
+    <Navbar />
+    <Outlet />
+  </div>
+);
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+    ],
+  },
+])
 function App() {
   return (
-    <div className="container mx-auto p-4">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </div>
+    <RouterProvider router={router} />
   );
 }
 
