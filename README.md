@@ -1,10 +1,11 @@
 # CRUD Product Express JS
 
-# Backend/Server
+## Backend/Server
 
-## adjust config/config.json
+adjust config/config.json
 
 adjust the username,password and the name of database in config/config.json
+create the database first manually on dbeaver postgres
 
 ```bash
 "development": {
@@ -16,13 +17,13 @@ adjust the username,password and the name of database in config/config.json
 }
 ```
 
-## intall the dependencies
+intall the dependencies
 
 ```
 npm install
 ```
 
-## start the backend server
+start the backend server
 
 ```
 node server.js
