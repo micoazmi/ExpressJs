@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,8 +20,14 @@ const Login = () => {
       const accessToken = response.data.accessToken;
       localStorage.setItem('token', accessToken); // Save token to localStorage
       setMessage('Login successful');
+      navigate('/'); // Navigate to home page on successful login
     } catch (error) {
       setMessage('Login failed');
+      Swal.fire({
+        icon: "error",
+        title: "Login failed",
+        text: "Something went wrong!",
+      });
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -24,6 +25,11 @@ const Register = () => {
       navigate('/login');
     } catch (error) {
       setMessage('Registration failed');
+      Swal.fire({
+        icon: "error",
+        title: "Registration failed",
+        text: "Something went wrong!",
+      });
     }
   };
 
