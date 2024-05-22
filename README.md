@@ -35,3 +35,23 @@ cd client
 npm install
 npm run dev
 ```
+
+## Screenshot
+
+Here is an example screenshot of the project:
+
+## Login
+
+![Example Screenshot](./images/login.png)
+
+## Home
+
+![Example Screenshot](./images/home.png)
+
+## Profile
+
+![Example Screenshot](./images/profile.png)
+
+## Register
+
+![Example Screenshot](./images/register.png)
